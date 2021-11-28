@@ -1,140 +1,34 @@
-# Next.js TypeScript Starter Kit [![CircleCI](https://circleci.com/gh/deptno/next.js-typescript-starter-kit.svg?style=svg)](https://circleci.com/gh/deptno/next.js-typescript-starter-kit)
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-![samples](assets/samples.png)
+## Getting Started
 
-> see **[ChangeLog](CHANGELOG.md)**
-
-## Feature
- - TypeScript
- - Styled-jsx
- - Module css **(PostCSS - cssnext, nested, import)**
- - SEO & analytics(Google Analytics, Facebook Pixel, <s>Naver Analytics</s>)
- - ~~Storybook **(support module css)**~~
- - Jest & Enzyme **(support module css)**
-
-### Load from CDN
- - font-awesome@5
-
-## Installation
-
-```sh
-git clone https://github.com/deptno/next.js-typescript-starter-kit my-project
-cd my-project
-rm -r .git
-yarn
-```
-
-## Run :rocket:
-
-#### :rocket: Test
-```bash
-yarn test # test
-yarn test:watch
-yarn test:coverage # report coverage
-```
-
-<details><summary>~~:rocket: StoryBook~~</summary>
-<p>
-
-#### :rocket: StoryBook
-```bash
-yarn storybook # open browser localhost:6006
-```
+First, run the development server:
 
 ```bash
-yarn build-storybook # Build storybook static assets
+npm run dev
+# or
+yarn dev
 ```
 
-</p>
-</details>
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### :rocket: Development
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-```bash
-yarn start:dev # run
-```
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-### :rocket: Production
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-#### Serve
-```bash
-yarn
-yarn build # create .next directory
-yarn start # start server
-```
+## Learn More
 
-#### Build static HTML
-```bash
-yarn
-yarn build # create .next directory
-yarn export # create .out directory
-```
+To learn more about Next.js, take a look at the following resources:
 
-## Configuration
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Set SEO & analytics variables
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-> src/constants/env.ts
+## Deploy on Vercel
 
-```typescript
-export const GA_TRACKING_ID = ''
-export const FB_TRACKING_ID = ''
-export const SENTRY_TRACKING_ID = ''
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-// for meta tag <og & twitter>
-export const SITE_NAME = ''
-export const SITE_TITLE = ''
-export const SITE_DESCRIPTION = ''
-export const SITE_IMAGE = ''
-```
-
-If each variable evaluated false, it does not load related library
-
-## Usage
-
-### Module CSS ([src/components/Home.tsx](src/components/Home.tsx))
-
-```typescript jsx
-import * as classnames from 'classnames'
-import * as css from './Home.css'
-
-export const Just = props => <div className={css.className}>
-export const Mixed = props => <div className={classnames('row', 'home', css.home)}>
-```
-
-### Styled-jsx
-
-#### Global scope ([src/components/Layout.tsx](src/components/Layout.tsx))
-
-```typescript jsx
-const Layout = props =>
-  <head>
-    <style jsx global>{`
-      div > * {
-        font-size: 32px;
-      }
-    `}
-    </style>
-  </head>
-```
-
-#### Local scope ([src/components/Home.tsx](src/components/Home.tsx))
-
-```typescript jsx
-export const Home = props =>
-  <div>
-    <style jsx>{`{
-      color: darkred;
-    }`}</style>
-    home
-  </div>
-```
-
-#### Others
-
-- styled-jsx/css [issue#2](https://github.com/deptno/next.js-typescript-starter-kit/issues/2)
-- external css, module [issue#3](https://github.com/deptno/next.js-typescript-starter-kit/issues/3)
-
-### Related
-
-- [typescript-monorepo-next-example](https://github.com/deptno/typescript-monorepo-next-example) - Next.js version
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
