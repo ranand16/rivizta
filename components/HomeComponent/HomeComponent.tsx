@@ -6,8 +6,8 @@ import { useState } from 'react';
     const [name, setName] = useState("");
     const [date, setDate] = useState("");
     const handleSubmit= (e: React.FormEvent<HTMLFormElement>): void => {
-    //   addChoreLog([choreDesc, name, date])
     console.log(choreDesc, " :: ", name, " :: ", date); 
+    console.log(choreDesc, " 2nd time :: ", name, " 2nd time :: ", date); 
     e.preventDefault();
     }
   
