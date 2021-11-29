@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import HomeComponent from '../components/HomeComponent/HomeComponent'
+import FormComponent from '../components/FormComponent/FormComponent'
 import styles from '../styles/Home.module.css'
 import Head from '../src/seo-head'
 
@@ -12,9 +12,9 @@ const Home: NextPage = () => {
         ogimage={''}
       ></Head>
       <main className={styles.main}>
-        <HomeComponent />
+        <FormComponent />
       </main>
-      <footer className={styles.footer}></footer>
+      {/* <footer className={styles.footer}></footer> */}
     </div>
   )
 }
