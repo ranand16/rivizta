@@ -25,22 +25,14 @@ function FormComponent() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     console.log(" :: ", name, " :: ");
-    console.log(" 2nd time :: ", name, " 2nd time :: ");
+    console.log(" 2nd time :: ", name, " 2nd time :: ", generateDetailsApiRoute());
     axios
       .post(generateDetailsApiRoute(), {
         firstname,
         lastname,
-        email,
-        pronoun,
-        phone1,
-        gender,
-        city,
-        country,
-        address,
-        state,
-        callingCode1,
-      }).then(()=>{
-        console.log("res:: ");
+        email
+      }).then((res)=>{
+        console.log("res:: ", res);
       }).catch((err) => {
           console.log(err);
       });
