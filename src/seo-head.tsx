@@ -13,7 +13,7 @@ type ChildProps = {
 const Meta: FC<ChildProps> = ({
     title, 
     description, 
-    ogimage = "", 
+    ogimage = "https://c.tenor.com/KWfGAvAWtaQAAAAC/150rupiya-dega-dedsau-rupiya-dega.gif", 
     styleSheet = [], 
     children, 
     keywords = [],
