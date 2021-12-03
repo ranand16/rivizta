@@ -4,6 +4,7 @@ import React from 'react';
 import { useState } from 'react';
 import styles from './FormComponent.module.scss';
 import { generateDetailsApiRoute } from '../../config/ApiRoutes';
+import { BASE_SERVER_V1_API } from '../../config/Constants';
 
 function FormComponent() {
   const [firstname, setFirstname] = useState<string>("");
@@ -25,17 +26,32 @@ function FormComponent() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     console.log(" :: ", name, " :: ");
-    console.log(" 2nd time :: ", name, " 2nd time :: ", generateDetailsApiRoute());
-    axios
-      .post(generateDetailsApiRoute(), {
+    axios({
+      method: 'post',
+      baseURL: BASE_SERVER_V1_API,
+      url: '/lottery',
+      data: {
         firstname,
         lastname,
         email
-      }).then((res)=>{
-        console.log("res:: ", res);
-      }).catch((err) => {
-          console.log(err);
-      });
+      }
+    }).then(response => {
+      console.log(response);
+    })
+    .catch(error => {
+      console.log(error)
+    });
+    
+    // axios
+    //   .post(generateDetailsApiRoute(), {
+    //     firstname,
+    //     lastname,
+    //     email
+    //   }).then((res)=>{
+    //     console.log("res:: ", res);
+    //   }).catch((err) => {
+    //       console.log(err);
+    //   });
 
   }
 

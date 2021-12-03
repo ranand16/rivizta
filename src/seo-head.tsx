@@ -23,7 +23,7 @@ const Meta: FC<ChildProps> = ({
             <title>{title || 'Rivizta' }</title>
             <meta name="title" content={title} />
             <meta name="description" content={description} />
-            <meta http-equiv="Content-Security-Policy" content=""></meta> 
+            <meta httpEquiv="Content-Security-Policy" content=""></meta> 
             <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"></meta>
 
             {/* <-- Open Graph / Facebook --> */}
