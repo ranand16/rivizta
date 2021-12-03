@@ -5,6 +5,7 @@ import { useState } from 'react';
 import styles from './FormComponent.module.scss';
 import { generateDetailsApiRoute } from '../../config/ApiRoutes';
 import { BASE_SERVER_V1_API } from '../../config/Constants';
+import { ParticipateFormStrings } from './constants';
 
 function FormComponent() {
   const [firstname, setFirstname] = useState<string>("");
@@ -18,14 +19,17 @@ function FormComponent() {
   const [address, setAddress] = useState<string>("");
   const [state, setState] = useState<string>("");
   const [callingCode1, setCallingCode1] = useState<number>();
+  const [participating, setParticipating] = useState<boolean>(false);
+  const [error, setError] = useState<string|null>(null);
+  
   // const [bio, setBio] = useState<string>("");
   // const [picture, setPicture] = useState<string>("");
   // const [username, setUsername] = useState<string>("");
   // const [dob, setDob] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    setParticipating(true);
     e.preventDefault();
-    console.log(" :: ", name, " :: ");
     axios({
       method: 'post',
       baseURL: BASE_SERVER_V1_API,
@@ -37,9 +41,11 @@ function FormComponent() {
       }
     }).then(response => {
       console.log(response);
+      setParticipating(false);
     })
     .catch(error => {
-      console.log(error)
+      setError(error.response.data.errorDetails.ererrorMsg);
+      setParticipating(false);
     });
   }
 
@@ -161,9 +167,13 @@ function FormComponent() {
         <br/> */}
         <input 
           type='submit' 
-          value='Add Review' 
+          value={participating ? ParticipateFormStrings.participatingBtnCTA: ParticipateFormStrings.participateBtnCTA }
+          disabled={participating} 
         />
       </form>
+      {
+        error && <p>{error}</p>
+      }
     </section>
   )
 }
