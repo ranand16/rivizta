@@ -29,7 +29,7 @@ function FormComponent() {
     axios({
       method: 'post',
       baseURL: BASE_SERVER_V1_API,
-      url: '/lottery',
+      url: generateDetailsApiRoute(),
       data: {
         firstname,
         lastname,
@@ -41,18 +41,6 @@ function FormComponent() {
     .catch(error => {
       console.log(error)
     });
-    
-    // axios
-    //   .post(generateDetailsApiRoute(), {
-    //     firstname,
-    //     lastname,
-    //     email
-    //   }).then((res)=>{
-    //     console.log("res:: ", res);
-    //   }).catch((err) => {
-    //       console.log(err);
-    //   });
-
   }
 
   return (
