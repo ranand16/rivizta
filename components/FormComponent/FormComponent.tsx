@@ -21,7 +21,7 @@ function FormComponent() {
   const [callingCode1, setCallingCode1] = useState<number>();
   const [participating, setParticipating] = useState<boolean>(false);
   const [error, setError] = useState<string|null>(null);
-  
+  const [success, setSuccess] = useState<string|null>(null);
   // const [bio, setBio] = useState<string>("");
   // const [picture, setPicture] = useState<string>("");
   // const [username, setUsername] = useState<string>("");
@@ -30,6 +30,8 @@ function FormComponent() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     setParticipating(true);
     e.preventDefault();
+    setError(null);
+    setSuccess(null);
     axios({
       method: 'post',
       baseURL: BASE_SERVER_V1_API,
@@ -41,6 +43,7 @@ function FormComponent() {
       }
     }).then(response => {
       console.log(response);
+      setSuccess(ParticipateFormStrings.success);
       setParticipating(false);
     })
     .catch(error => {
@@ -172,7 +175,16 @@ function FormComponent() {
         />
       </form>
       {
-        error && <p>{error}</p>
+        error && <><br/><p>{error}</p></>
+      }
+      {
+        success && <div>
+        <br/>
+        <p className={classnames("d-flex", "flex-column", "align-items-center")}>
+          {success}
+          <img src="https://c.tenor.com/KWfGAvAWtaQAAAAC/150rupiya-dega-dedsau-rupiya-dega.gif"/>
+        </p>
+        </div>
       }
     </section>
   )
