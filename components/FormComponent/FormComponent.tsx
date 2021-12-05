@@ -11,14 +11,17 @@ function FormComponent() {
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [pronoun, setPronoun] = useState<string>("");
+  // const [pronoun, setPronoun] = useState<string>("");
   const [phone1, setPhone1] = useState<number>();
-  const [gender, setGender] = useState<string>("");
-  const [city, setCity] = useState<string>("");
-  const [country, setCountry] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
-  const [state, setState] = useState<string>("");
-  const [callingCode1, setCallingCode1] = useState<number>();
+  // const [gender, setGender] = useState<string>("");
+  // const [city, setCity] = useState<string>("");
+  // const [country, setCountry] = useState<string>("");
+  // const [address, setAddress] = useState<string>("");
+  // const [state, setState] = useState<string>("");
+  const [callingCode1, setCallingCode1] = useState<string>();
+  const [giveawaycode, setGiveawaycode] = useState<string>();
+  
+  // POST API CALL STATES
   const [participating, setParticipating] = useState<boolean>(false);
   const [error, setError] = useState<string|null>(null);
   const [success, setSuccess] = useState<string|null>(null);
@@ -39,7 +42,10 @@ function FormComponent() {
       data: {
         firstname,
         lastname,
-        email
+        email,
+        callingCode1,
+        phone1,
+        giveaway_code: giveawaycode
       }
     }).then(response => {
       console.log(response);
@@ -55,17 +61,17 @@ function FormComponent() {
   return (
     <section className={classnames(styles.formSection)}>
       <form className={classnames("m-auto", "d-flex", "flex-column", "justify-content-center", styles.form)} onSubmit={(e: React.FormEvent<HTMLFormElement>) => { handleSubmit(e) }}>
-        <br />
+        {/* <br />
         <select id="pronoun" name="pronoun" placeholder={"Pronoun"} onChange={(e)=>{
             setPronoun(e.currentTarget.value.split("+")[1] || "He/His/Mr.");
             setGender(e.currentTarget.value.split("+")[0] || "Male");
           }}>
           <option value="female+She/Her/Ms./Mrs.">She/Her/Ms./Mrs.</option>
           <option value="male+He/His/Mr.">He/His/Mr.</option>
-        </select>
+        </select> */}
         <br />
         <input 
-          name='name' 
+          name='firstname' 
           type='text'
           placeholder={"First Name"}
           value={firstname}
@@ -101,7 +107,7 @@ function FormComponent() {
           type='text'
           placeholder={"Calling Code"}
           value={callingCode1}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setCallingCode1(parseInt(e.currentTarget.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setCallingCode1(e.currentTarget.value)}
         />
         <br />
         <input 
@@ -112,6 +118,14 @@ function FormComponent() {
           onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setPhone1(parseInt(e.currentTarget.value))}
         />
         <br />
+        <input
+          name='giveawaycode'
+          type='text'
+          placeholder={"Giveaway Code"}
+          value={giveawaycode}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setGiveawaycode(e.currentTarget.value)}
+        />
+        <br />
         {/* <input 
           name='bio'
           type='text'
@@ -120,7 +134,7 @@ function FormComponent() {
           onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setBio(e.currentTarget.value)}
         />
         <br/> */}
-        <input 
+        {/* <input 
           name='city'
           type='text'
           placeholder={"City"}
@@ -151,7 +165,7 @@ function FormComponent() {
           value={state}
           onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setState(e.currentTarget.value)}
         />
-        <br/>
+        <br/> */}
         {/* <input 
           name='picture'
           type='text'
@@ -182,7 +196,7 @@ function FormComponent() {
         <br/>
         <p className={classnames("d-flex", "flex-column", "align-items-center")}>
           {success}
-          <img src="https://c.tenor.com/KWfGAvAWtaQAAAAC/150rupiya-dega-dedsau-rupiya-dega.gif"/>
+          <img width={250} src="https://c.tenor.com/KWfGAvAWtaQAAAAC/150rupiya-dega-dedsau-rupiya-dega.gif"/>
         </p>
         </div>
       }
