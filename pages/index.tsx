@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import FormComponent from '../components/FormComponent/FormComponent'
+import FormComponent from '../components/LotteryFormComponent/FormComponent'
 import styles from '../styles/Home.module.css'
 import Head from '../src/seo-head'
 

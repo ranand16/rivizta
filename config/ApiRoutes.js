@@ -1,4 +1,7 @@
-const generateDetailsApiRoute = () => `/lottery`;
+const generateLotteryParticipateApiRoute = () => `/lottery`;
+const generateAddProductApiRoute = () => `/product`;
+
 export {
-    generateDetailsApiRoute
+    generateLotteryParticipateApiRoute,
+    generateAddProductApiRoute
 }

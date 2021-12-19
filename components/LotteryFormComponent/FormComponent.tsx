@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import React from 'react';
 import { useState } from 'react';
 import styles from './FormComponent.module.scss';
-import { generateDetailsApiRoute } from '../../config/ApiRoutes';
+import { generateLotteryParticipateApiRoute } from '../../config/ApiRoutes';
 import { BASE_SERVER_V1_API } from '../../config/Constants';
 import { ParticipateFormStrings } from './constants';
 
@@ -38,7 +38,7 @@ function FormComponent() {
     axios({
       method: 'post',
       baseURL: BASE_SERVER_V1_API,
-      url: generateDetailsApiRoute(),
+      url: generateLotteryParticipateApiRoute(),
       data: {
         firstname,
         lastname,
