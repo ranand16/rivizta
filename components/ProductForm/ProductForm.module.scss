@@ -1,0 +1,59 @@
+@import '../../styles/scss/partials/breakpoints';
+
+.formSection{
+    max-width: 1024px;
+    width: 100%;
+    .form{
+        input, select{
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        input[type=text], input[type=date], select{
+            width: 100%;
+            margin: 0 auto;
+            display: block;
+            padding: 0.4rem 0.8rem;
+            color: inherit;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: inherit;
+            line-height: 0.4;
+            border: none;
+            border-radius: 2px;
+            transition: box-shadow 300ms;
+            outline: none;
+            box-shadow: 0.2rem 0.8rem 1.6rem var(#5e35b1);
+            @include media-xs-min(){
+                width: 450px;
+            }
+        }
+
+        input[type=text]::placeholder, input[type=text]::placeholder {
+            color: #B0BEC5;
+          }
+
+        input:focus {
+         
+        }
+
+        input[type=submit] {
+            background-color: #C31A7F;
+            font-weight: bold;
+            padding: 12px 15px;
+            color: #ffffff;
+            border: none;
+            border-radius: 2px;
+            @include media-xs-min(){
+                width: 450px;
+            }
+        }
+
+        label, input[type=checkbox]{
+            display: inline;
+            width: auto;
+            margin: 0 auto;
+        }
+    }
+
+}
