@@ -14,7 +14,6 @@ const AddProduct: NextPage = () => {
             <main className={styles.main}>
                 <ProductForm />
             </main>
-            
         </div>
     );
 }

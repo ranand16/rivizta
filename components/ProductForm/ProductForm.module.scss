@@ -1,4 +1,5 @@
 @import '../../styles/scss/partials/breakpoints';
+@import '../../styles/scss/partials/_variables';
 
 .formSection{
     max-width: 1024px;
@@ -38,7 +39,7 @@
         }
 
         input[type=submit] {
-            background-color: #C31A7F;
+            background-color: $defPink;
             font-weight: bold;
             padding: 12px 15px;
             color: #ffffff;
@@ -53,6 +54,10 @@
             display: inline;
             width: auto;
             margin: 0 auto;
+        }
+
+        .errorText {
+            color: $defYellow;        
         }
     }
 

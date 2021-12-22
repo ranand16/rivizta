@@ -6,60 +6,66 @@ import styles from './ProductForm.module.scss';
 import { generateAddProductApiRoute } from '../../config/ApiRoutes';
 import { BASE_SERVER_V1_API, getTimeStampFromDate } from '../../config/Constants';
 import { AddProductFormStrings } from './constants';
+import { Formik, FormikErrors, FormikValues } from 'formik';
 
 function ProductForm() {
-  const [jwt, setJWT] = useState<string>("");
-  const [name, setName] = useState<string>("");
+  const [jwt, setJWT] = useState<string>(""); // compulsory
+  const [name, setName] = useState<string>(""); // compulsory
   const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<string>("");
-  const [type, setType] = useState<string>("");
-  const [productlink, setProductLink] = useState<string>("");
+  const [type, setType] = useState<string>(""); // compulsory
+  const [productlink, setProductLink] = useState<string>(""); // compulsory
   const [earnInGiveaway, setEarnInGiveaway] = useState<boolean>(false);
   const [productSeoHandler, setProductSeoHandler] = useState<string>("");
   const [addGiveaway, setAddGiveaway] = useState<boolean>(false);
 
-  const [winLink, setWinLink] = useState<string>();
+  const [winLink, setWinLink] = useState<string>("");
 
-  const [giveawayName, setGiveawayName] = useState<string>("");
+  const [giveawayName, setGiveawayName] = useState<string>(""); // compulsory
   const [giveawayRules, setGiveawayRules] = useState<string>("");
-  const [giveawayCode, setGiveawayCode] = useState<string>("");
-  const [startdate, setStartdate] = useState<string>("");
-  const [enddate, setEnddate] = useState<string>("");
-  const [winnerAnnounceDate, setWinnerAnnounceDate] = useState<string>("");
-  const [giveawayPageSeoHandler, setGiveawayPageSeoHandler] = useState<string>("");
+  const [giveawayCode, setGiveawayCode] = useState<string>(""); // compulsory
+  const [startdate, setStartdate] = useState<string>(""); // compulsory
+  const [enddate, setEnddate] = useState<string>(""); // compulsory
+  const [winnerAnnounceDate, setWinnerAnnounceDate] = useState<string>(""); // compulsory
+  const [giveawayPageSeoHandler, setGiveawayPageSeoHandler] = useState<string>(""); // compulsory
   
   // POST API CALL STATES
   const [productAdding, setProductAdding] = useState<boolean>(false);
   const [error, setError] = useState<string|null>(null);
   const [success, setSuccess] = useState<string|null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  // const validateForm = () => {
+  //   if(jwt && jwt.length > 0 && name && name.length > 0 && type && type.length > 0 && productlink && productlink.length > 0 && productSeoHandler && productSeoHandler.length > 0 && giveawayName && giveawayName.length > 0 && giveawayCode && giveawayCode.length > 0 && startdate && startdate.length > 0 && enddate && enddate.length > 0 && winnerAnnounceDate && winnerAnnounceDate.length > 0 && giveawayPageSeoHandler && giveawayPageSeoHandler.length > 0) {
+
+  //   }
+  // } 
+
+  const handleSubmit = (values: FormikValues) => {
     setProductAdding(true);
-    e.preventDefault();
     setError(null);
     setSuccess(null);
     const payload = {
-      addGiveaway,
+      addGiveaway: values.addGiveaway,
       product: {
-        name,
-        description,
-        image,
-        type,
-        link: productlink,
-        earn_in_giveaway: earnInGiveaway,
-        seo_handler: productSeoHandler
+        name: values.name,
+        description: values.description,
+        image: values.image,
+        type: values.type,
+        link: values.productlink,
+        earn_in_giveaway: values.earnInGiveaway,
+        seo_handler: values.productSeoHandler
       },
-      win: addGiveaway ? {
-        link: winLink
+      win: values.addGiveaway ? {
+        link: values.winLink
       } : null,
-      giveaway: addGiveaway ? {
-        name: giveawayName,
-        rules: giveawayRules,
-        gcode: giveawayCode,
-        startdate: getTimeStampFromDate(startdate.split("-")),
-        enddate: getTimeStampFromDate(enddate.split("-")),
-        winnerAnnounceDate: getTimeStampFromDate(winnerAnnounceDate.split("-")),
-        seo_handler: giveawayPageSeoHandler
+      giveaway: values.addGiveaway ? {
+        name: values.giveawayName,
+        rules: values.giveawayRules,
+        gcode: values.giveawayCode,
+        startdate: values.startdate ? getTimeStampFromDate(values.startdate.split("-")) : null,
+        enddate: values.enddate ? getTimeStampFromDate(values.enddate.split("-")) : null,
+        winnerAnnounceDate: values.winnerAnnounceDate ? getTimeStampFromDate(values.winnerAnnounceDate.split("-")) : null,
+        seo_handler: values.giveawayPageSeoHandler
       } : null
     };
     console.log(payload);
@@ -83,15 +89,65 @@ function ProductForm() {
 
   return (
     <section className={classnames(styles.formSection)}>
+
+      <Formik
+       initialValues={{ 
+        jwt: jwt, 
+        name: name, 
+        description: description, 
+        type: type, 
+        productlink: productlink, 
+        productSeoHandler: productSeoHandler, 
+        addGiveaway: addGiveaway, 
+        earnInGiveaway: earnInGiveaway, 
+        winLink: winLink,
+        giveawayName: giveawayName,
+        giveawayRules: giveawayRules,
+        giveawayCode: giveawayCode,
+        startdate: startdate,
+        enddate: enddate,
+        winnerAnnounceDate: winnerAnnounceDate,
+        giveawayPageSeoHandler: giveawayPageSeoHandler
+      }}
+       validate={values => {
+         console.log(values);        
+        const errors: FormikErrors<typeof values> = {};
+        if(values.jwt.trim().length <= 0) errors.jwt = "You need JWT for adding a new product";
+        if(values.name.trim().length <= 0) errors.name = "Product name field cannot be empty";
+        if(values.type.trim().length <= 0) errors.type = "Product type field cannot be empty";
+        if(values.productlink.trim().length <= 0) errors.productlink = "Product link field cannot be empty";
+        if(values.addGiveaway){
+          if(values.productSeoHandler.trim().length <= 0) errors.productSeoHandler = "Product seo handler field cannot be empty";
+          if(values.giveawayName.trim().length <= 0) errors.productSeoHandler = "Giveaway name field cannot be empty";
+          if(values.giveawayCode.trim().length <= 0) errors.productSeoHandler = "Giveaway code field cannot be empty";
+          if(values.startdate.trim().length <= 0) errors.productSeoHandler = "Start date cannot be empty";
+          if(values.enddate.trim().length <= 0) errors.productSeoHandler = "End date field cannot be empty";
+          if(values.winnerAnnounceDate.trim().length <= 0) errors.productSeoHandler = "Winnerannounce date field cannot be empty";
+          if(values.giveawayPageSeoHandler.trim().length <= 0) errors.productSeoHandler = "Giveaway seo handler link field cannot be empty";
+        }
+        return errors;
+       }}
+       onSubmit={handleSubmit}
+      >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit
+      }) => (
       <form className={classnames("m-auto", "d-flex", "flex-column", "justify-content-center", styles.form)} onSubmit={(e: React.FormEvent<HTMLFormElement>) => { handleSubmit(e) }}>
         <br />
         <input 
           name='jwt' 
           type='text'
           placeholder={"ENTER JWT HERE"}
-          value={jwt}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void  => setJWT(e.target.value)}
+          value={values.jwt}
+          onChange={handleChange}
+          onBlur={handleBlur}
         />
+        {touched.jwt && errors.jwt && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.jwt}</div>}
         <br />
         <br />
         <br />
@@ -100,134 +156,162 @@ function ProductForm() {
           name='name' 
           type='text'
           placeholder={"Product Name"}
-          value={name}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void  => setName(e.target.value)}
+          value={values.name}
+          onChange={handleChange}
+          onBlur={handleBlur}
         />
+        {touched.name && errors.name && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.name}</div>}
         <br />
         <input 
           name='description'
           type='text'
           placeholder={"Description"}
-          value={description}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>  setDescription(e.currentTarget.value)}
+          value={values.description}
+          onChange={handleChange}
+          onBlur={handleBlur}
         />
-        <br/>
+        {touched.description && errors.description && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.description}</div>}
+        {/* <br/>
         <input 
           name='image'
           type='text'
           placeholder={"image"}
           value={image}
           onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setImage(e.currentTarget.value)}
-        />
+        /> */}
         <br/>
         <input 
           name='type'
           type='text'
           placeholder={"Type of Product"}
-          value={type}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setType(e.currentTarget.value)}
+          value={values.type}
+          onChange={handleChange}
+          onBlur={handleBlur}
         />
+        {touched.type && errors.type && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.type}</div>}
         <br />
         <input
           name='productlink'
           type='text'
           placeholder={"Product Link"}
-          value={productlink}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setProductLink(e.currentTarget.value)}
+          value={values.productlink}
+          onChange={handleChange}
+          onBlur={handleBlur}
         />
-        <br />
+        {touched.productlink && errors.productlink && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.productlink}</div>}
+         <br />
         <input 
           name='productSeoHandler'
           type='text'
           placeholder='Product seo-handler'
-          value={productSeoHandler}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setProductSeoHandler(e.currentTarget.value)}
+          value={values.productSeoHandler}
+          onChange={handleChange}
+          onBlur={handleBlur}
         />
-
+        {touched.productSeoHandler && errors.productSeoHandler && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.productSeoHandler}</div>}
         <br />
         <label><span>This product has a giveaway? </span><input 
           name='addGiveaway'
           type='checkbox'
-          checked={addGiveaway}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setAddGiveaway(e.currentTarget.checked)}
+          checked={values.addGiveaway}
+          onChange={handleChange}
+          onBlur={handleBlur}
         />
         </label>
-
+        {touched.addGiveaway && errors.addGiveaway && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.addGiveaway}</div>}
         {       
-          addGiveaway && <>
+          values.addGiveaway && <>
             <br />
             <label><span>This product is itself a giveaway? </span> <input 
               name='earnInGiveaway'
               type='checkbox'
-              checked={earnInGiveaway}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setEarnInGiveaway(e.currentTarget.checked)}
+              checked={values.earnInGiveaway}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
-            </label>        
+            </label>
+            {touched.productlink && errors.productlink && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.productlink}</div>}
             <br />
             <input 
               name='winLink'
               type='text'
               placeholder={"Win Link"}
-              value={winLink}
+              value={values.winLink}
               disabled={earnInGiveaway}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setWinLink(e.currentTarget.value)}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
+            {touched.winLink && errors.winLink && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.winLink}</div>}
             <br />
             <input 
               name='giveawayName'
               type='text'
               placeholder='Giveaway Name'
-              value={giveawayName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setGiveawayName(e.currentTarget.value)}
+              value={values.giveawayName}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
+            {touched.giveawayName && errors.giveawayName && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.giveawayName}</div>}
             <br />
             <input 
               name='giveawayRules'
               type='text'
               placeholder='Giveaway Rules'
-              value={giveawayRules}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setGiveawayRules(e.currentTarget.value)}
+              value={values.giveawayRules}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
+            {touched.giveawayRules && errors.giveawayRules && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.giveawayRules}</div>}
             <br />
             <input 
               name='giveawayCode'
               type='text'
               placeholder='Giveaway Code'
-              value={giveawayCode}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setGiveawayCode(e.currentTarget.value)}
+              value={values.giveawayCode}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
+            {touched.giveawayCode && errors.giveawayCode && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.giveawayCode}</div>}
             <br />
             <input 
               name='startdate'
               type='date'
               placeholder='Giveaway start date'
-              value={startdate}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setStartdate(e.currentTarget.value)}
+              value={values.startdate}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
+            {touched.startdate && errors.startdate && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.startdate}</div>}
             <br />
             <input 
               name='enddate'
               type='date'
               placeholder='Giveaway end date'
-              value={enddate}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setEnddate(e.currentTarget.value)}
+              value={values.enddate}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
+            {touched.enddate && errors.enddate && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.enddate}</div>}
             <br />
             <input 
               name='winnerAnnounceDate'
               type='date'
               placeholder='Giveaway winner announce date'
-              value={winnerAnnounceDate}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setWinnerAnnounceDate(e.currentTarget.value)}
+              value={values.winnerAnnounceDate}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
+            {touched.winnerAnnounceDate && errors.winnerAnnounceDate && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.winnerAnnounceDate}</div>}
             <br />
             <input 
               name='giveawayPageSeoHandler'
               type='text'
               placeholder='Giveaway seo-handler'
-              value={giveawayPageSeoHandler}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setGiveawayPageSeoHandler(e.currentTarget.value)}
-            /> 
+              value={values.giveawayPageSeoHandler}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {touched.giveawayPageSeoHandler && errors.giveawayPageSeoHandler && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.giveawayPageSeoHandler}</div>}
           </>
         }
         <br />
@@ -237,6 +321,9 @@ function ProductForm() {
           disabled={productAdding} 
         />
       </form>
+      
+      )}
+      </Formik>
       {
         error && <><br/><p className={classnames("d-flex", "flex-column", "align-items-center")}>{error}</p></>
       }
