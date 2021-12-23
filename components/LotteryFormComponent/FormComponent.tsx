@@ -146,7 +146,7 @@ function FormComponent() {
       )}
      </Formik>
       {
-        error && <><br/><p>{error}</p></>
+        error && <><br/><p className={classnames("d-flex", "flex-column", "align-items-center")}>{error}</p></>
       }
       {
         success && <div>
