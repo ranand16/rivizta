@@ -9,36 +9,30 @@ import { AddProductFormStrings } from './constants';
 import { Formik, FormikErrors, FormikValues } from 'formik';
 
 function ProductForm() {
-  const [jwt, setJWT] = useState<string>(""); // compulsory
-  const [name, setName] = useState<string>(""); // compulsory
-  const [description, setDescription] = useState<string>("");
-  const [image, setImage] = useState<string>("");
-  const [type, setType] = useState<string>(""); // compulsory
-  const [productlink, setProductLink] = useState<string>(""); // compulsory
-  const [earnInGiveaway, setEarnInGiveaway] = useState<boolean>(false);
-  const [productSeoHandler, setProductSeoHandler] = useState<string>("");
-  const [addGiveaway, setAddGiveaway] = useState<boolean>(false);
+  const jwt = ""; // compulsory
+  const name =""; // compulsory
+  const description ="";
+  const image ="";
+  const type =""; // compulsory
+  const productlink =""; // compulsory
+  const earnInGiveaway =false;
+  const productSeoHandler ="";
+  const addGiveaway =false;
 
-  const [winLink, setWinLink] = useState<string>("");
+  const winLink ="";
 
-  const [giveawayName, setGiveawayName] = useState<string>(""); // compulsory
-  const [giveawayRules, setGiveawayRules] = useState<string>("");
-  const [giveawayCode, setGiveawayCode] = useState<string>(""); // compulsory
-  const [startdate, setStartdate] = useState<string>(""); // compulsory
-  const [enddate, setEnddate] = useState<string>(""); // compulsory
-  const [winnerAnnounceDate, setWinnerAnnounceDate] = useState<string>(""); // compulsory
-  const [giveawayPageSeoHandler, setGiveawayPageSeoHandler] = useState<string>(""); // compulsory
+  const giveawayName =""; // compulsory
+  const giveawayRules ="";
+  const giveawayCode =""; // compulsory
+  const startdate =""; // compulsory
+  const enddate =""; // compulsory
+  const winnerAnnounceDate =""; // compulsory
+  const giveawayPageSeoHandler =""; // compulsory
   
   // POST API CALL STATES
   const [productAdding, setProductAdding] = useState<boolean>(false);
   const [error, setError] = useState<string|null>(null);
   const [success, setSuccess] = useState<string|null>(null);
-
-  // const validateForm = () => {
-  //   if(jwt && jwt.length > 0 && name && name.length > 0 && type && type.length > 0 && productlink && productlink.length > 0 && productSeoHandler && productSeoHandler.length > 0 && giveawayName && giveawayName.length > 0 && giveawayCode && giveawayCode.length > 0 && startdate && startdate.length > 0 && enddate && enddate.length > 0 && winnerAnnounceDate && winnerAnnounceDate.length > 0 && giveawayPageSeoHandler && giveawayPageSeoHandler.length > 0) {
-
-  //   }
-  // } 
 
   const handleSubmit = (values: FormikValues) => {
     setProductAdding(true);
@@ -72,7 +66,7 @@ function ProductForm() {
     axios({
       method: 'post',
       baseURL: BASE_SERVER_V1_API,
-      headers: {"Authorization" : `Bearer ${jwt}`},
+      headers: {"Authorization" : `Bearer ${values.jwt}`},
       url: generateAddProductApiRoute(),
       data: payload
     }).then(response => {
@@ -89,7 +83,6 @@ function ProductForm() {
 
   return (
     <section className={classnames(styles.formSection)}>
-
       <Formik
        initialValues={{ 
         jwt: jwt, 

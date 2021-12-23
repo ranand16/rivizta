@@ -6,33 +6,23 @@ import styles from './FormComponent.module.scss';
 import { generateLotteryParticipateApiRoute } from '../../config/ApiRoutes';
 import { BASE_SERVER_V1_API } from '../../config/Constants';
 import { ParticipateFormStrings } from './constants';
+import { Formik, FormikErrors, FormikValues } from 'formik';
 
 function FormComponent() {
-  const [firstname, setFirstname] = useState<string>("");
-  const [lastname, setLastname] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  // const [pronoun, setPronoun] = useState<string>("");
-  const [phone1, setPhone1] = useState<number>();
-  // const [gender, setGender] = useState<string>("");
-  // const [city, setCity] = useState<string>("");
-  // const [country, setCountry] = useState<string>("");
-  // const [address, setAddress] = useState<string>("");
-  // const [state, setState] = useState<string>("");
-  const [callingCode1, setCallingCode1] = useState<string>();
-  const [giveawaycode, setGiveawaycode] = useState<string>();
-  
+  const firstname ="";
+  const lastname ="";
+  const email ="";
+  const callingCode1 = "";
+  const giveawaycode = "";
+  const phone1 = -1;
+    
   // POST API CALL STATES
   const [participating, setParticipating] = useState<boolean>(false);
   const [error, setError] = useState<string|null>(null);
   const [success, setSuccess] = useState<string|null>(null);
-  // const [bio, setBio] = useState<string>("");
-  // const [picture, setPicture] = useState<string>("");
-  // const [username, setUsername] = useState<string>("");
-  // const [dob, setDob] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = (values: FormikValues) => {
     setParticipating(true);
-    e.preventDefault();
     setError(null);
     setSuccess(null);
     axios({
@@ -40,154 +30,121 @@ function FormComponent() {
       baseURL: BASE_SERVER_V1_API,
       url: generateLotteryParticipateApiRoute(),
       data: {
-        firstname,
-        lastname,
-        email,
-        callingCode1,
-        phone1,
-        giveaway_code: giveawaycode
+        firstname: values.firstname,
+        lastname: values.lastname,
+        email: values.email,
+        callingCode1: values.callingCode1,
+        phone1: values.phone1,
+        giveaway_code: values.giveawaycode
       }
     }).then(response => {
       console.log(response);
       setSuccess(ParticipateFormStrings.success);
-      setParticipating(false);
     })
     .catch(error => {
-      setError(error.response.data.errorDetails.ererrorMsg);
+      setError(error.response?.data?.errorDetails?.ererrorMsg || "Something went wrong. Please try later.");
+    }).finally(()=>{
       setParticipating(false);
-    });
+    })
   }
 
   return (
     <section className={classnames(styles.formSection)}>
-      <form className={classnames("m-auto", "d-flex", "flex-column", "justify-content-center", styles.form)} onSubmit={(e: React.FormEvent<HTMLFormElement>) => { handleSubmit(e) }}>
-        {/* <br />
-        <select id="pronoun" name="pronoun" placeholder={"Pronoun"} onChange={(e)=>{
-            setPronoun(e.currentTarget.value.split("+")[1] || "He/His/Mr.");
-            setGender(e.currentTarget.value.split("+")[0] || "Male");
-          }}>
-          <option value="female+She/Her/Ms./Mrs.">She/Her/Ms./Mrs.</option>
-          <option value="male+He/His/Mr.">He/His/Mr.</option>
-        </select> */}
-        <br />
-        <input 
-          name='firstname' 
-          type='text'
-          placeholder={"First Name"}
-          value={firstname}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void  => setFirstname(e.target.value)}
-        />
-        <br />
-        <input 
-          name='lastname'
-          type='text'
-          placeholder={"Last Name"}
-          value={lastname}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void =>  setLastname(e.currentTarget.value)}
-        />
-        <br/>
-        {/* <input 
-          name='username'
-          type='text'
-          placeholder={"UserName"}
-          value={username}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setUsername(e.currentTarget.value)}
-        />
-        <br/> */}
-        <input 
-          name='email'
-          type='text'
-          placeholder={"Email"}
-          value={email}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setEmail(e.currentTarget.value)}
-        />
-        <br/>
-        <input 
-          name='callingCode1'
-          type='text'
-          placeholder={"Calling Code"}
-          value={callingCode1}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setCallingCode1(e.currentTarget.value)}
-        />
-        <br />
-        <input 
-          name='phone1'
-          type='text'
-          placeholder={"Phone"}
-          value={phone1}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setPhone1(parseInt(e.currentTarget.value))}
-        />
-        <br />
-        <input
-          name='giveawaycode'
-          type='text'
-          placeholder={"Giveaway Code"}
-          value={giveawaycode}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setGiveawaycode(e.currentTarget.value)}
-        />
-        <br />
-        {/* <input 
-          name='bio'
-          type='text'
-          placeholder={"Bio"}
-          value={bio}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setBio(e.currentTarget.value)}
-        />
-        <br/> */}
-        {/* <input 
-          name='city'
-          type='text'
-          placeholder={"City"}
-          value={city}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setCity(e.currentTarget.value)}
-        />
-        <br/>
-        <input 
-          name='country'
-          type='text'
-          placeholder={"Country"}
-          value={country}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setCountry(e.currentTarget.value)}
-        />
-        <br/>
-        <input 
-          name='address'
-          type='text'
-          placeholder={"Address"}
-          value={address}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setAddress(e.currentTarget.value)}
-        />
-        <br/>
-        <input 
-          name='state'
-          type='text'
-          placeholder={"State"}
-          value={state}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setState(e.currentTarget.value)}
-        />
-        <br/> */}
-        {/* <input 
-          name='picture'
-          type='text'
-          placeholder={"Picture"}
-          value={picture}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setPicture(e.currentTarget.value)}
-        />
-        <br/> */}
-        {/* <input
-          name='dob' 
-          type='date'
-          placeholder={"Date Of Birth"}
-          value={dob}
-          onChange={e => setDob(e.target.value)}
-        />
-        <br/> */}
-        <input 
-          type='submit' 
-          value={participating ? ParticipateFormStrings.participatingBtnCTA: ParticipateFormStrings.participateBtnCTA }
-          disabled={participating} 
-        />
-      </form>
+      <Formik
+        initialValues={{
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          callingCode1: callingCode1,
+          phone1: phone1,
+          giveawaycode: giveawaycode
+        }}
+        validate={values => {
+          const errors: FormikErrors<typeof values> = {};
+          if(values.firstname.trim().length <= 0) errors.firstname = ParticipateFormStrings.errorFirstname;
+          if(values.email.trim().length <= 0) errors.email = ParticipateFormStrings.errorEmail;
+          if(values.phone1 && Number.isInteger(values.phone1)) errors.phone1 = ParticipateFormStrings.errorPhone1;
+          if(values.giveawaycode.length <= 0) errors.giveawaycode = ParticipateFormStrings.errorGiveawayCode ;
+          return errors;
+        }}
+        onSubmit={handleSubmit}
+      >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit
+      }) => (
+        <form className={classnames("m-auto", "d-flex", "flex-column", "justify-content-center", styles.form)} onSubmit={(e: React.FormEvent<HTMLFormElement>) => { handleSubmit(e) }}>
+          <br />
+          <input 
+            name='firstname' 
+            type='text'
+            placeholder={"First Name"}
+            value={values.firstname}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          {touched.firstname && errors.firstname && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.firstname}</div>}
+          <br />
+          <input 
+            name='lastname'
+            type='text'
+            placeholder={"Last Name"}
+            value={values.lastname}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          <br/>
+          <input 
+            name='email'
+            type='text'
+            placeholder={"Email"}
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          {touched.email && errors.email && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.email}</div>}
+          <br/>
+          <input 
+            name='callingCode1'
+            type='text'
+            placeholder={"Calling Code"}
+            value={values.callingCode1}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          <br />
+          <input 
+            name='phone1'
+            type='text'
+            placeholder={"Phone"}
+            value={values.phone1}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          {touched.phone1 && errors.phone1 && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.phone1}</div>}
+          <br />
+          <input
+            name='giveawaycode'
+            type='text'
+            placeholder={"Giveaway Code"}
+            value={values.giveawaycode}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          {touched.giveawaycode && errors.giveawaycode && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.giveawaycode}</div>}
+          <br />
+          <input 
+            type='submit' 
+            value={participating ? ParticipateFormStrings.participatingBtnCTA: ParticipateFormStrings.participateBtnCTA }
+            disabled={participating} 
+          />
+        </form>
+      )}
+     </Formik>
       {
         error && <><br/><p>{error}</p></>
       }
