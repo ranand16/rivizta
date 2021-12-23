@@ -13,7 +13,7 @@ type ChildProps = {
 const Meta: FC<ChildProps> = ({
     title, 
     description, 
-    ogimage = "https://c.tenor.com/KWfGAvAWtaQAAAAC/150rupiya-dega-dedsau-rupiya-dega.gif", 
+    ogimage = "https://stickerly.pstatic.net/sticker_pack/rpEWW5jsv6APuMPXif7B4w/3QNUDQ/22/b9602166-6c8e-4b63-9c65-9cdfc71bb0f3.png", 
     styleSheet = [], 
     children, 
     keywords = [],
