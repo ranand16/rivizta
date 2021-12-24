@@ -8,13 +8,17 @@ import { BASE_SERVER_V1_API } from '../../config/Constants';
 import { ParticipateFormStrings } from './constants';
 import { Formik, FormikErrors, FormikValues } from 'formik';
 
+interface IProps { gcode: string }
+
 function FormComponent() {
-  const firstname ="";
-  const lastname ="";
+  const name ="";
   const email ="";
-  const callingCode1 = "";
   const giveawaycode = "";
-  const phone1 = -1;
+  // console.log("gcode :::: ", gcode);
+  // useEffect(()=> {
+  // }, [gcode]);
+  // const phone1 = -1;
+  // const callingCode1 = "";
     
   // POST API CALL STATES
   const [participating, setParticipating] = useState<boolean>(false);
@@ -30,11 +34,10 @@ function FormComponent() {
       baseURL: BASE_SERVER_V1_API,
       url: generateLotteryParticipateApiRoute(),
       data: {
-        firstname: values.firstname,
-        lastname: values.lastname,
+        name: values.name,
         email: values.email,
-        callingCode1: values.callingCode1,
-        phone1: values.phone1,
+        // callingCode1: values.callingCode1,
+        // phone1: values.phone1,
         giveaway_code: values.giveawaycode
       }
     }).then(response => {
@@ -52,18 +55,18 @@ function FormComponent() {
     <section className={classnames(styles.formSection)}>
       <Formik
         initialValues={{
-          firstname: firstname,
-          lastname: lastname,
+          name: name,
           email: email,
-          callingCode1: callingCode1,
-          phone1: phone1,
+          // callingCode1: callingCode1,
+          // phone1: phone1,
           giveawaycode: giveawaycode
         }}
         validate={values => {
           const errors: FormikErrors<typeof values> = {};
-          if(values.firstname.trim().length <= 0) errors.firstname = ParticipateFormStrings.errorFirstname;
+          const fullname = values.name.trim();
+          if(fullname.length <= 0) errors.name = ParticipateFormStrings.errorName;
           if(values.email.trim().length <= 0) errors.email = ParticipateFormStrings.errorEmail;
-          if(values.phone1 && Number.isInteger(values.phone1)) errors.phone1 = ParticipateFormStrings.errorPhone1;
+          // if(values.phone1 && Number.isInteger(values.phone1)) errors.phone1 = ParticipateFormStrings.errorPhone1;
           if(values.giveawaycode.length <= 0) errors.giveawaycode = ParticipateFormStrings.errorGiveawayCode ;
           return errors;
         }}
@@ -80,23 +83,14 @@ function FormComponent() {
         <form className={classnames("m-auto", "d-flex", "flex-column", "justify-content-center", styles.form)} onSubmit={(e: React.FormEvent<HTMLFormElement>) => { handleSubmit(e) }}>
           <br />
           <input 
-            name='firstname' 
+            name='name' 
             type='text'
-            placeholder={"First Name"}
-            value={values.firstname}
+            placeholder={"Full Name"}
+            value={values.name}
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {touched.firstname && errors.firstname && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.firstname}</div>}
-          <br />
-          <input 
-            name='lastname'
-            type='text'
-            placeholder={"Last Name"}
-            value={values.lastname}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
+          {touched.name && errors.name && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.name}</div>}
           <br/>
           <input 
             name='email'
@@ -107,7 +101,7 @@ function FormComponent() {
             onBlur={handleBlur}
           />
           {touched.email && errors.email && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.email}</div>}
-          <br/>
+          {/* <br/>
           <input 
             name='callingCode1'
             type='text'
@@ -125,7 +119,7 @@ function FormComponent() {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {touched.phone1 && errors.phone1 && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.phone1}</div>}
+          {touched.phone1 && errors.phone1 && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.phone1}</div>} */}
           <br />
           <input
             name='giveawaycode'

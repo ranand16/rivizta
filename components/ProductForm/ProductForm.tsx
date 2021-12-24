@@ -71,7 +71,7 @@ function ProductForm() {
       data: payload
     }).then(response => {
       console.log(response);
-      setSuccess(AddProductFormStrings.productSuccess(addGiveaway));
+      setSuccess(AddProductFormStrings.productSuccess(values.addGiveaway));
     })
     .catch(error => {
       console.log(error);
@@ -111,12 +111,12 @@ function ProductForm() {
         if(values.productlink.trim().length <= 0) errors.productlink = "Product link field cannot be empty";
         if(values.addGiveaway){
           if(values.productSeoHandler.trim().length <= 0) errors.productSeoHandler = "Product seo handler field cannot be empty";
-          if(values.giveawayName.trim().length <= 0) errors.productSeoHandler = "Giveaway name field cannot be empty";
-          if(values.giveawayCode.trim().length <= 0) errors.productSeoHandler = "Giveaway code field cannot be empty";
-          if(values.startdate.trim().length <= 0) errors.productSeoHandler = "Start date cannot be empty";
-          if(values.enddate.trim().length <= 0) errors.productSeoHandler = "End date field cannot be empty";
-          if(values.winnerAnnounceDate.trim().length <= 0) errors.productSeoHandler = "Winnerannounce date field cannot be empty";
-          if(values.giveawayPageSeoHandler.trim().length <= 0) errors.productSeoHandler = "Giveaway seo handler link field cannot be empty";
+          if(values.giveawayName.trim().length <= 0) errors.giveawayName = "Giveaway name field cannot be empty";
+          if(values.giveawayCode.trim().length <= 0) errors.giveawayCode = "Giveaway code field cannot be empty";
+          if(values.startdate.trim().length <= 0) errors.startdate = "Start date cannot be empty";
+          if(values.enddate.trim().length <= 0) errors.enddate = "End date field cannot be empty";
+          if(values.winnerAnnounceDate.trim().length <= 0) errors.winnerAnnounceDate = "Winnerannounce date field cannot be empty";
+          if(values.giveawayPageSeoHandler.trim().length <= 0) errors.giveawayPageSeoHandler = "Giveaway seo handler link field cannot be empty";
         }
         return errors;
        }}
@@ -230,7 +230,7 @@ function ProductForm() {
               type='text'
               placeholder={"Win Link"}
               value={values.winLink}
-              disabled={earnInGiveaway}
+              disabled={values.earnInGiveaway}
               onChange={handleChange}
               onBlur={handleBlur}
             />
