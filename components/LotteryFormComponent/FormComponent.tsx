@@ -11,13 +11,14 @@ import { Formik, FormikErrors, FormikValues } from 'formik';
 interface IProps { gcode: string }
 
 function FormComponent() {
-  const name ="";
-  const email ="";
-  const giveawaycode = "";
+  
   // console.log("gcode :::: ", gcode);
   // useEffect(()=> {
   // }, [gcode]);
-  // const phone1 = -1;
+  const name ="";
+  const email ="";
+  const giveawaycode = "";
+  const phone1 = "";
   // const callingCode1 = "";
     
   // POST API CALL STATES
@@ -37,7 +38,7 @@ function FormComponent() {
         name: values.name,
         email: values.email,
         // callingCode1: values.callingCode1,
-        // phone1: values.phone1,
+        phone1: values.phone1,
         giveaway_code: values.giveawaycode
       }
     }).then(response => {
@@ -58,15 +59,16 @@ function FormComponent() {
           name: name,
           email: email,
           // callingCode1: callingCode1,
-          // phone1: phone1,
+          phone1: parseInt(phone1),
           giveawaycode: giveawaycode
         }}
         validate={values => {
           const errors: FormikErrors<typeof values> = {};
           const fullname = values.name.trim();
+          const phone = values.phone1;
           if(fullname.length <= 0) errors.name = ParticipateFormStrings.errorName;
           if(values.email.trim().length <= 0) errors.email = ParticipateFormStrings.errorEmail;
-          // if(values.phone1 && Number.isInteger(values.phone1)) errors.phone1 = ParticipateFormStrings.errorPhone1;
+          if(!(phone && Number.isInteger(phone))) errors.phone1 = ParticipateFormStrings.errorPhone1;
           if(values.giveawaycode.length <= 0) errors.giveawaycode = ParticipateFormStrings.errorGiveawayCode ;
           return errors;
         }}
@@ -109,17 +111,17 @@ function FormComponent() {
             value={values.callingCode1}
             onChange={handleChange}
             onBlur={handleBlur}
-          />
+          />*/}
           <br />
           <input 
             name='phone1'
-            type='text'
+            type='number'
             placeholder={"Phone"}
             value={values.phone1}
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {touched.phone1 && errors.phone1 && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.phone1}</div>} */}
+          {touched.phone1 && errors.phone1 && <div className={classnames("d-flex justify-content-center", styles.errorText)}>{errors.phone1}</div>} 
           <br />
           <input
             name='giveawaycode'
