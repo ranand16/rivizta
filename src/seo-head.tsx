@@ -44,9 +44,9 @@ const Meta: FC<ChildProps> = ({
                 <meta name="keywords" content={keywords.toString()} />}
 
             <link rel="preconnect" href="https://fonts.gstatic.com"></link>
-            {styleSheet.map((style: string, index: Key) => {
+            {styleSheet.length > 0 && styleSheet.map((style: string, index: Key) => {
                 return (
-                    <link key={index} rel="stylesheet" as="style" href={style} data-optimized-fonts="true"></link>
+                    <link key={index} rel="stylesheet" as="style" href={`${style}`} data-optimized-fonts="true"></link>
                 )
             })}
             {children}
