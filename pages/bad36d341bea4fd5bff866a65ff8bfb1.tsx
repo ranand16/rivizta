@@ -9,6 +9,8 @@ interface Props {
 }
 
 const PaymentRequest: NextPage<Props> = ({ data, error } : Props) => {
+    
+    if(data != null)document.location = data;
     console.log(data, error);
     return <>{error || data || "Processing" }</>;
 }
