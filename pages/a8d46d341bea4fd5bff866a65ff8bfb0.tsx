@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { GetServerSideProps, NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 import { generatePaymentDemandApiRoute } from "../config/ApiRoutes";
 
 interface Props {
@@ -9,12 +9,28 @@ interface Props {
 }
 
 const PaymentRequest: NextPage<Props> = ({ data, error } : Props) => {
+    const [copied, setCopied] = useState(false);
+    const copyText = () => {
+        var element = document.getElementById("linktext");
+        if(element) {
+            navigator.clipboard.writeText(element.innerHTML || element.innerText);
+            setCopied(true);
+            setTimeout(()=>{
+                setCopied(false);
+            },3000);
+        }
+    }
     console.log(data, error);
     if(error) {
         return <>{error}</>;
     }
     if(data) {
-        return <>Here is a short link: {<a href={data["paymentDemand"]["bitly_link"]}>Link</a>}</>;
+        return <>
+            Here is a short link: {<a href={data["paymentDemand"]["bitly_link"]}>Link</a>}
+            <button onClick={()=>copyText()}>Copy link</button>
+            <div id="linktext" style={{ visibility: "hidden" }}>{data["paymentDemand"]["bitly_link"]}</div>
+            {copied && <div>Copied to clipboard!</div>}
+        </>;
     }
     return <>{"Processing"}</>
 }

@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     const id = refinedQuery.get("id");
     try {
         const { data } = await Axios.post(generateFetchPaymentDemandApiRoute(), { uniqueParamId: id });
-        console.log(os);
+        console.log(os, data);
         if (os != "unknown") {
             res.writeHead(301, { "Content-Type": "text/html" });
             res.write(`<!DOCTYPE html><html><head><title>Pay</title></head><body><script type='text/javascript'>location.href='${data.data.uri}';</script></body></html>`);
