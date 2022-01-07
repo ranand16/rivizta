@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
         for(const [key, value] of refinedQueryEntries) { // each 'entry' is a [key, value] tupple
             refinedQueryObject[key] = value;
         }
-        const paymentURL = `upi://pay?pa=${refinedQuery.get("pa")}&pn=${refinedQuery.get("pn")}&mc=${refinedQuery.get("mc")}&tid=${refinedQuery.get("tid")}&tr=${refinedQuery.get("tr")}&tn=${refinedQuery.get("tn")}&cu=${refinedQuery.get("cu")}&refUrl=${refinedQuery.get("refUrl")}&mode=${refinedQuery.get("mode")}&purpose=${refinedQuery.get("purpose")}`;
+        const paymentURL = `upi://pay?pa=${refinedQuery.get("pa")}&pn=${refinedQuery.get("pn")}&mc=${refinedQuery.get("mc")}&tid=${refinedQuery.get("tid")}&tr=${refinedQuery.get("tr")}&tn=${refinedQuery.get("tn")}&am=${refinedQuery.get("am")}&cu=${refinedQuery.get("cu")}&refUrl=${refinedQuery.get("refUrl")}&mode=${refinedQuery.get("mode")}&purpose=${refinedQuery.get("purpose")}`;
         const { data } = await Axios.post(generatePaymentDemandApiRoute(),{ payment_url: paymentURL,  ...refinedQueryObject });
         return {
             props: {
@@ -49,6 +49,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
             }
         }
     } catch(err){
+        console.log("------------err------------")
+        console.log(err)
+        console.log("------------err------------")
         return {
             props: {
                 error: "There was an error. Please try after sometime",
