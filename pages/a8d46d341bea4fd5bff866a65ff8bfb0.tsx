@@ -4,13 +4,19 @@ import React from "react";
 import { generatePaymentDemandApiRoute } from "../config/ApiRoutes";
 
 interface Props {
-    data: string | null,
+    data: Record<string, any> | null,
     error: any
 }
 
 const PaymentRequest: NextPage<Props> = ({ data, error } : Props) => {
     console.log(data, error);
-    return <>{error || data || "Processing" }</>;
+    if(error) {
+        return <>{error}</>;
+    }
+    if(data) {
+        return <>Here is a short link: {<a href={data["paymentDemand"]["bitly_link"]}>Link</a>}</>;
+    }
+    return <>{"Processing"}</>
 }
 
 export default PaymentRequest;
@@ -20,15 +26,15 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     // upi://pay?pa=9886142140@upi&pn=Myself&mc=payeeMCC&tid=trxnID&tr=trxnRefId&tn=This is a note&am=1&cu=INR&refUrl=refUrl&mode=04&purpose=00
     // const config = { headers: { authorization: `${token}` } };
 
-    if(!(refinedQuery.get("pa") && refinedQuery.get("pn") && refinedQuery.get("am") && refinedQuery.get("tn"))) {
-        return {
-            props: { 
-                error: "pa, pn, am and tn are compulsory fields for a payment demand request",
-                data: null,
-            }
-        }
-    }
-    try{
+    // if(!(refinedQuery.get("pa") && refinedQuery.get("pn") && refinedQuery.get("am") && refinedQuery.get("tn"))) {
+    //     return {
+    //         props: { 
+    //             error: "pa, pn, am and tn are compulsory fields for a payment demand request",
+    //             data: null,
+    //         }
+    //     }
+    // }
+    try {
         const refinedQueryEntries = refinedQuery.entries();
         const refinedQueryObject: any = {};
         for(const [key, value] of refinedQueryEntries) { // each 'entry' is a [key, value] tupple
@@ -39,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
         return {
             props: {
                 error: null,
-                data: "Success"
+                data: data.data
             }
         }
     } catch(err){
@@ -50,5 +56,4 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
             }
         }      
     }
-    
 }
