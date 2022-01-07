@@ -32,13 +32,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     try {
         const { data } = await Axios.post(generateFetchPaymentDemandApiRoute(), { uniqueParamId: id });
         console.log(os);
-        if (os == "unknown") {
+        if (os != "unknown") {
             res.writeHead(301, { "Content-Type": "text/html" });
             res.write(`<!DOCTYPE html><html><head><title>Pay</title></head><body><script type='text/javascript'>location.href='${data.data.uri}';</script></body></html>`);
             res.end();
         }
         // res.writeHead(302, { location: data.data.uri });
-        return { props: { os, error: null, data: data.data.uri } }
+        return { props: { os, error: null, data: "Please use a mobile phone for payment." } }
     } catch (err) {
         console.log(err);
         return { props: { os, error: "There was an error. Please try after sometime", data: null } }
