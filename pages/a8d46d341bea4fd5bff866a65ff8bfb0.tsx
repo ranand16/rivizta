@@ -50,20 +50,19 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     //         }
     //     }
     // }
+    var pa, pn, tn, am, cu = "INR", mode="00";
+    if(refinedQuery.get("pa") != null || refinedQuery.get("pa") != "") pa = refinedQuery.get("pa"); else pa = "ranand16@dbs";
+    if(refinedQuery.get("pn") != null || refinedQuery.get("pn") != "") pn = refinedQuery.get("pn"); else pn = "Rishabhpp";
+    if(refinedQuery.get("tn") != null || refinedQuery.get("tn") != "") tn = refinedQuery.get("tn"); else tn = "justaregularnote";
+    if(refinedQuery.get("am") != null || refinedQuery.get("am") != "") am = refinedQuery.get("am"); else am = 0;
+
     try {
         const refinedQueryEntries = refinedQuery.entries();
         const refinedQueryObject: any = {};
         for(const [key, value] of refinedQueryEntries) { // each 'entry' is a [key, value] tupple
             refinedQueryObject[key] = value;
         }
-        var paymentURL = `upi://pay?pa=${refinedQuery.get("pa")}&pn=${refinedQuery.get("pn")}&tn=${refinedQuery.get("tn")}&am=${refinedQuery.get("am")}`;
-        
-        if(refinedQuery.get("cu"))paymentURL = paymentURL + `&cu=${refinedQuery.get("cu")}`; 
-        else paymentURL = paymentURL + '&cu=INR';
-    
-        if(refinedQuery.get("mode"))paymentURL = paymentURL + `&mode=${refinedQuery.get("mode")}`;     
-        if(refinedQuery.get("purpose"))paymentURL = paymentURL + `&purpose=${refinedQuery.get("purpose")}`; 
-    
+        var paymentURL = `upi://pay?pa=${pa}&pn=${pn}&tn=${tn}&am=${am}&cu=${cu}&mode=${mode}`;
     
         const { data } = await Axios.post(generatePaymentDemandApiRoute(),{ payment_url: paymentURL,  ...refinedQueryObject });
         return {
