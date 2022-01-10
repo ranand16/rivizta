@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     //         }
     //     }
     // }
-    var pa, pn, tn, am, cu = "INR", mode="02";
+    var pa, pn, tn, am, cu = "INR";
     if(refinedQuery.get("pa") != null || refinedQuery.get("pa") != "") pa = refinedQuery.get("pa"); else pa = "ranand16@dbs";
     if(refinedQuery.get("pn") != null || refinedQuery.get("pn") != "") pn = refinedQuery.get("pn"); else pn = "Rishabhpp";
     if(refinedQuery.get("tn") != null || refinedQuery.get("tn") != "") tn = refinedQuery.get("tn"); else tn = "justaregularnote";
@@ -62,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
         for(const [key, value] of refinedQueryEntries) { // each 'entry' is a [key, value] tupple
             refinedQueryObject[key] = value;
         }
-        var paymentURL = `upi://pay?pa=${pa}&pn=${pn}&tn=${tn}&am=${am}&cu=${cu}&mode=${mode}`;
+        var paymentURL = `upi://pay?pa=${pa}&pn=${pn}&tn=${tn}&am=${am}&cu=${cu}`;
     
         const { data } = await Axios.post(generatePaymentDemandApiRoute(),{ payment_url: paymentURL,  ...refinedQueryObject });
         return {
