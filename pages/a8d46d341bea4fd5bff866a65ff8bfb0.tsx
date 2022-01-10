@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     //         }
     //     }
     // }
-    var pa, pn, tn, am, cu = "INR", mode="00";
+    var pa, pn, tn, am, cu = "INR", mode="02";
     if(refinedQuery.get("pa") != null || refinedQuery.get("pa") != "") pa = refinedQuery.get("pa"); else pa = "ranand16@dbs";
     if(refinedQuery.get("pn") != null || refinedQuery.get("pn") != "") pn = refinedQuery.get("pn"); else pn = "Rishabhpp";
     if(refinedQuery.get("tn") != null || refinedQuery.get("tn") != "") tn = refinedQuery.get("tn"); else tn = "justaregularnote";
