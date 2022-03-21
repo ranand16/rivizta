@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Table } from 'react-bootstrap'
 import FormComponent from '../components/SuperheroFormComponent/FormComponent'
 import { Superhero, Superpower } from '../config/Interfaces'
+import axios from 'axios'
 
 const Home: NextPage = ({ superpowerData: spd, superheroData: shd }: any) => {
   const [modalShow, setModalShow] = React.useState(false);
@@ -71,7 +72,11 @@ const Home: NextPage = ({ superpowerData: spd, superheroData: shd }: any) => {
         <GenericModal
           modalbody={<FormComponent superpowerOptions={superpowerData} />}
           show={modalShow}
-          onHide={() => setModalShow(false)}
+          onHide={async () => {
+            setModalShow(false);
+            const resp = await axios.get(generateGetAllSuperheroApiRoute(), {});
+            setSuperheroData(get(resp, "data.data", []));
+          }}
           heading='Add a new superhero'
         />
       </main>

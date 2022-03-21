@@ -21,7 +21,6 @@ function SuperpowerFormComponent() {
     setSubmit(true);
     setError(null);
     setSuccess(null);
-    console.log("STArTING...");
     axios({
       method: 'post',
       baseURL: `${BASE_SERVER_V1_API}/comicon`,
@@ -30,8 +29,6 @@ function SuperpowerFormComponent() {
         superpower: values.superpower
       }
     }).then(response => {
-      console.log("response ---> ");
-      console.log(response);
       setSuccess(SuperpowerFormStrings.success);
     })
     .catch(error => {
