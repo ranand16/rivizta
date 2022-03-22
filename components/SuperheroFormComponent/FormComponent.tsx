@@ -3,24 +3,24 @@ import classnames from 'classnames';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import styles from './FormComponent.module.scss';
-import { generateAddSuperheroApiRoute, generateGetAllSuperpowerApiRoute } from '../../config/ApiRoutes';
+import { generateAddSuperheroApiRoute, generateEditSuperheroApiRoute, generateGetAllSuperpowerApiRoute } from '../../config/ApiRoutes';
 import { BASE_SERVER_V1_API } from '../../config/Constants';
 import { SuperheroFormStrings } from './constants';
 import { Field, Formik, FormikErrors, FormikValues } from 'formik';
 import SuperpowerFormComponent from '../SuperpowerFormComponent/FormComponent';
 import GenericModal from '../Modals/GenericModal';
-import { Superpower } from '../../config/Interfaces';
+import { ModalMode, Superhero, Superpower } from '../../config/Interfaces';
 import { get } from 'lodash';
-interface IProps { superpowerOptions: Array<Superpower> }
+interface IProps { superheroData?: Superhero | null, superpowerOptions: Array<Superpower>, mode: ModalMode, editId: number }
 
-function FormComponent({ superpowerOptions: sp = [] }: IProps) {
+function FormComponent({ superheroData, superpowerOptions: sp = [], mode = "ADD", editId }: IProps) {
   const [superpowerOptions, setSuperpowerOptions] = useState<Array<Superpower>>(sp);
-  const superhero ="";
-  const publisher ="";
-  const alter_ego = "";
-  const first_appearance = "";
-  const characters = "";
-  const superpowers: any[] = [];
+  const superhero = get(superheroData, "superhero", "");
+  const publisher = get(superheroData, "publisher", "");
+  const alter_ego = get(superheroData, "alter_ego", "");
+  const first_appearance = get(superheroData, "first_appearance", "");
+  const characters = get(superheroData, "characters", "");
+  const superpowers = get(superheroData, "superpowers", []);
 
   // POST API CALL STATES
   const [addSuperpower, setAddSuperpower] = useState<boolean>(false);
@@ -37,18 +37,20 @@ function FormComponent({ superpowerOptions: sp = [] }: IProps) {
     setError(null);
     setSuccess(null);
     console.log("STArTING...");
+    let data: any = {
+      superhero: values.superhero,
+      publisher: values.publisher,
+      first_appearance: values.first_appearance,
+      alter_ego: values.alter_ego,
+      characters: values.characters,
+      superpowers: values.superpowers.toString()
+    }
+    if(editId && mode == "EDIT") data["id"] = editId;
     axios({
-      method: 'post',
+      method: mode == "ADD"? 'post': "PUT",
       baseURL: `${BASE_SERVER_V1_API}/comicon`,
-      url: generateAddSuperheroApiRoute(),
-      data: {
-        superhero: values.superhero,
-        publisher: values.publisher,
-        first_appearance: values.first_appearance,
-        alter_ego: values.alter_ego,
-        characters: values.characters,
-        superpowers: values.superpowers.toString()
-      }
+      url:  mode == "ADD"? generateAddSuperheroApiRoute() : generateEditSuperheroApiRoute(editId),
+      data: data
     }).then(response => {
       console.log(response);
       setSuccess(SuperheroFormStrings.success);
@@ -65,7 +67,9 @@ function FormComponent({ superpowerOptions: sp = [] }: IProps) {
       <GenericModal
         modalbody={<SuperpowerFormComponent />}
         show={addSuperpower}
-        onHide={async () => {
+        showSecondaryBtn={true}
+        secondaryBtnText={"Close"}
+        onSecondaryButtonClick={async () => {
           const resp = await axios.get(generateGetAllSuperpowerApiRoute(), {});
           setSuperpowerOptions(get(resp, "data.data", []));
           setAddSuperpower(false)

@@ -1,24 +1,31 @@
 import { get } from "lodash";
 import React, { MouseEventHandler } from "react";
 import { Button, Modal } from "react-bootstrap";
+import { ModalMode } from "../../config/Interfaces";
 
 interface IProps { 
   show: boolean,
-  onHide: MouseEventHandler<HTMLButtonElement>,
-  modalbody: any, 
+  modalbody: any,
+  onPrimaryButtonClick?: MouseEventHandler<HTMLButtonElement>,
+  onSecondaryButtonClick?: MouseEventHandler<HTMLButtonElement>,
   size?: "sm" | "lg" | "xl" | undefined,
   heading?: string, 
-  showClose?: boolean, 
+  showPrimaryBtn?: boolean,
+  showSecondaryBtn?: boolean, 
+  primaryBtnText?: string
   secondaryBtnText?: string
 }
 
 export default function GenericModal({ 
   show,
-  onHide,
+  modalbody, 
+  onPrimaryButtonClick = () => {},
+  onSecondaryButtonClick = () => {},
   size = "lg",
   heading="Modal heading", 
-  modalbody, 
-  showClose=true,
+  showPrimaryBtn=false,
+  showSecondaryBtn=false,
+  primaryBtnText="Confirm",
   secondaryBtnText="Close" 
 }: IProps) {
   return (
@@ -37,8 +44,11 @@ export default function GenericModal({
         {modalbody}
       </Modal.Body>
       {
-          showClose && 
-          <Modal.Footer>{showClose && <Button onClick={onHide}>{secondaryBtnText}</Button>}</Modal.Footer>
+          (showPrimaryBtn || showSecondaryBtn) && 
+          <Modal.Footer>
+            {showPrimaryBtn && <Button onClick={onPrimaryButtonClick}>{primaryBtnText}</Button>}
+            {showSecondaryBtn && <Button onClick={onSecondaryButtonClick}>{secondaryBtnText}</Button>}            
+          </Modal.Footer>
       }
     </Modal>
   );

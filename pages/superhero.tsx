@@ -1,18 +1,23 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import styles from '../styles/superhero.module.css'
 import Head from '../src/seo-head'
-import { generateGetAllSuperheroApiRoute, generateGetAllSuperpowerApiRoute } from '../config/ApiRoutes'
+import { generateDeleteSuperheroApiRoute, generateGetAllSuperheroApiRoute, generateGetAllSuperpowerApiRoute } from '../config/ApiRoutes'
 import Axios from 'axios'
-import { get } from 'lodash'
+import { get } from 'lodash';
 import GenericModal from '../components/Modals/GenericModal'
 import React, { useEffect, useState } from 'react'
 import { Button, Table } from 'react-bootstrap'
 import FormComponent from '../components/SuperheroFormComponent/FormComponent'
-import { Superhero, Superpower } from '../config/Interfaces'
+import { ModalMode, Superhero, Superpower } from '../config/Interfaces'
 import axios from 'axios'
+import { BASE_SERVER_V1_API } from '../config/Constants'
 
 const Home: NextPage = ({ superpowerData: spd, superheroData: shd }: any) => {
-  const [modalShow, setModalShow] = React.useState(false);
+  const [modalShow, setModalShow] = React.useState<boolean>(false);
+  const [deleteModalShow, setDeleteModalShow] = React.useState<boolean>(false);
+  const [modalMode, setModalMode] = React.useState<ModalMode>("ADD");
+  const [singlesuperheroData, setSingleSuperheroData] = React.useState<Superhero | null>(null); // to be used for edit pr delete purpose
+
   const [superheroData, setSuperheroData] = useState<Array<Superhero>>([]);
   const [superpowerData, setSuperpowerData] = useState<Array<Superpower>>([]);
   
@@ -49,6 +54,25 @@ const Home: NextPage = ({ superpowerData: spd, superheroData: shd }: any) => {
             <td>{get(superhero, "first_appearance", "")}</td>
             <td>{get(superhero, "publisher", "")}</td>
             <td>{get(superhero, "superpowers", "")}</td>
+            <td>
+            <Button variant="secondary" onClick={() => { 
+              setModalShow(true);
+              setModalMode("EDIT");
+              setSingleSuperheroData(superhero);
+            }}
+            >
+              Edit
+            </Button>
+            &nbsp;
+            <Button variant="danger" onClick={() => {
+              setDeleteModalShow(true);
+              setSingleSuperheroData(superhero);
+            }}
+            >
+              Delete
+            </Button>
+            </td>
+
           </tr>
         })}
       </tbody>
@@ -63,20 +87,53 @@ const Home: NextPage = ({ superpowerData: spd, superheroData: shd }: any) => {
         ogimage={'https://www.dccomics.com/sites/default/files/Char_Gallery_Batman_DTC1018_6053f2162bdf03.97426416.jpg'}
       ></Head>
       <main className={styles.main}>
-      {
-        superheroData.length > 0 && TableData()
-      }
-      <Button variant="primary" onClick={() => setModalShow(true)}>
-        Add a super hero
-      </Button>
+        {
+          superheroData.length > 0 && TableData()
+        }
+        <Button variant="primary" onClick={() => setModalShow(true)}>
+          Add a super hero
+        </Button>
         <GenericModal
-          modalbody={<FormComponent superpowerOptions={superpowerData} />}
+          show={deleteModalShow}
+          modalbody={<p>You won't be able to get this superhero back. Are you sure?</p>}
+          heading={"Are you sure you want to delete?"}
+          showPrimaryBtn={true}
+          onPrimaryButtonClick={async ()=>{
+            setDeleteModalShow(false);
+            await axios({
+              method: "DELETE",
+              baseURL: `${BASE_SERVER_V1_API}/comicon`,
+              url:  generateDeleteSuperheroApiRoute(get(singlesuperheroData,"id",-1)),
+              data: {}
+            }).then(response => {
+              console.log(response);
+            })
+            .catch(error => {
+              console.log(error);
+            }).finally(()=>{
+
+            });
+            const resp = await axios.get(generateGetAllSuperheroApiRoute(), {});
+            setSuperheroData(get(resp, "data.data", []));
+          }}
+          primaryBtnText={"Confirm"}
+          showSecondaryBtn={true}
+          onSecondaryButtonClick={()=>{
+            setDeleteModalShow(false);
+
+          }}
+          secondaryBtnText={"Close"}
+        />
+        <GenericModal
+          modalbody={<FormComponent superheroData={singlesuperheroData} mode={modalMode} superpowerOptions={superpowerData} editId={get(singlesuperheroData,"id",-1)} />}
           show={modalShow}
-          onHide={async () => {
+          showSecondaryBtn={true}
+          onSecondaryButtonClick={async () => {
             setModalShow(false);
             const resp = await axios.get(generateGetAllSuperheroApiRoute(), {});
             setSuperheroData(get(resp, "data.data", []));
           }}
+          secondaryBtnText={"close"}
           heading='Add a new superhero'
         />
       </main>

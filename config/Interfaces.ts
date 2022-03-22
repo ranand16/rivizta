@@ -10,3 +10,5 @@ export interface Superhero {
     superpowers: string,
     timecreated: number
 }
+
+export type ModalMode  = "ADD" | "EDIT";
