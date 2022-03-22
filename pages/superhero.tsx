@@ -63,6 +63,7 @@ const Home: NextPage = ({ superpowerData: spd, superheroData: shd }: any) => {
             >
               Edit
             </Button>
+            
             <Button variant="danger" onClick={() => {
               setDeleteModalShow(true);
               setSingleSuperheroData(superhero);
