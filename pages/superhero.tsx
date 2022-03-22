@@ -63,7 +63,7 @@ const Home: NextPage = ({ superpowerData: spd, superheroData: shd }: any) => {
             >
               Edit
             </Button>
-            
+
             <Button variant="danger" onClick={() => {
               setDeleteModalShow(true);
               setSingleSuperheroData(superhero);
@@ -95,7 +95,7 @@ const Home: NextPage = ({ superpowerData: spd, superheroData: shd }: any) => {
         </Button>
         <GenericModal
           show={deleteModalShow}
-          modalbody={<p>You won't be able to get this superhero back. Are you sure?</p>}
+          modalbody={<p>{"You won't be able to get this superhero back. Are you sure?"}</p>}
           heading={"Are you sure you want to delete?"}
           showPrimaryBtn={true}
           onPrimaryButtonClick={async ()=>{
