@@ -1,6 +1,8 @@
+import { ModalMode } from "../../config/Interfaces";
+
 export const SuperheroFormStrings = {
-    submitBtnCTA: "Add superhero Now!",
-    submittingBtnCTA: "Adding your favorite superhero...",
+    submitBtnCTA: (mode: ModalMode) => `${mode == "EDIT" ? "Update" : "Add"} superhero Now!`,
+    submittingBtnCTA: (mode: ModalMode) => `${mode == "EDIT" ? "Editing" : "Adding"} your favorite superhero...`,
     success: "You have successfully added your favorite superhero🤓",
     errorSuperheroName: "You need to enter name of your favorite superhero.",
     errorPublisherName: "You need to enter publisher name of your favorite superhero.",

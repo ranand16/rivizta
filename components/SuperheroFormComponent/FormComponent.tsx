@@ -49,7 +49,7 @@ function FormComponent({ superheroData, superpowerOptions: sp = [], mode = "ADD"
     axios({
       method: mode == "ADD"? 'post': "PUT",
       baseURL: `${BASE_SERVER_V1_API}/comicon`,
-      url:  mode == "ADD"? generateAddSuperheroApiRoute() : generateEditSuperheroApiRoute(editId),
+      url: mode == "ADD"? generateAddSuperheroApiRoute() : generateEditSuperheroApiRoute(editId),
       data: data
     }).then(response => {
       console.log(response);
@@ -65,7 +65,7 @@ function FormComponent({ superheroData, superpowerOptions: sp = [], mode = "ADD"
   return (
     <section className={classnames(styles.formSection)}>
       <GenericModal
-        modalbody={<SuperpowerFormComponent />}
+        modalbody={<SuperpowerFormComponent mode='ADD' />}
         show={addSuperpower}
         showSecondaryBtn={true}
         secondaryBtnText={"Close"}
@@ -189,7 +189,7 @@ function FormComponent({ superheroData, superpowerOptions: sp = [], mode = "ADD"
           <br />
           <input 
             type='submit' 
-            value={submit ? SuperheroFormStrings.submittingBtnCTA: SuperheroFormStrings.submitBtnCTA }
+            value={submit ? SuperheroFormStrings.submittingBtnCTA(mode): SuperheroFormStrings.submitBtnCTA(mode) }
             disabled={submit} 
           />
         </form>

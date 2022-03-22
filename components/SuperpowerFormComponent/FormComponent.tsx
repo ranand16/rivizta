@@ -3,16 +3,17 @@ import classnames from 'classnames';
 import React from 'react';
 import { useState } from 'react';
 import styles from './FormComponent.module.scss';
-import { generateAddSuperpowerApiRoute } from '../../config/ApiRoutes';
+import { generateAddSuperpowerApiRoute, generateEditSuperpowerApiRoute } from '../../config/ApiRoutes';
 import { BASE_SERVER_V1_API } from '../../config/Constants';
 import { SuperpowerFormStrings } from './constants';
 import { Formik, FormikErrors, FormikValues } from 'formik';
+import { ModalMode, Superpower } from '../../config/Interfaces';
+import { get } from 'lodash';
 
-// interface IProps { gcode: string }
+interface IProps { superpowerData?: Superpower | null, mode: ModalMode, editId?: number }
 
-function SuperpowerFormComponent() {
-  const superpower ="";
-  // POST API CALL STATES
+function SuperpowerFormComponent({ superpowerData, mode = "ADD", editId }: IProps) {
+  const superpower = get(superpowerData, "superpower", "");
   const [submit, setSubmit] = useState<boolean>(false);
   const [error, setError] = useState<string|null>(null);
   const [success, setSuccess] = useState<string|null>(null);
@@ -21,13 +22,15 @@ function SuperpowerFormComponent() {
     setSubmit(true);
     setError(null);
     setSuccess(null);
+    const data: any = {
+      superpower: values.superpower
+    };
+    if(editId && mode == "EDIT") data["id"] = editId; 
     axios({
-      method: 'post',
+      method: mode == "ADD" ? 'post' : 'PUT',
       baseURL: `${BASE_SERVER_V1_API}/comicon`,
-      url: generateAddSuperpowerApiRoute(),
-      data: {
-        superpower: values.superpower
-      }
+      url: mode == "ADD"? generateAddSuperpowerApiRoute() : generateEditSuperpowerApiRoute(editId),
+      data: data
     }).then(response => {
       setSuccess(SuperpowerFormStrings.success);
     })
@@ -77,7 +80,7 @@ function SuperpowerFormComponent() {
           <br />
           <input 
             type='submit' 
-            value={submit ? SuperpowerFormStrings.submittingBtnCTA: SuperpowerFormStrings.submitBtnCTA }
+            value={submit ? SuperpowerFormStrings.submittingBtnCTA(mode): SuperpowerFormStrings.submitBtnCTA(mode) }
             disabled={submit} 
           />
         </form>

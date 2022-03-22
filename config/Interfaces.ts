@@ -12,3 +12,8 @@ export interface Superhero {
 }
 
 export type ModalMode  = "ADD" | "EDIT";
+
+export interface SuperPowerModalMode {
+    id: number,
+    superpower: string
+} 

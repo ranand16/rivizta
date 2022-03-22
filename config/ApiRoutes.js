@@ -7,7 +7,9 @@ const generateFetchPaymentDemandApiRoute= () => `${BASE_SERVER_V1_API}/fetch-pay
 const generateAddSuperheroApiRoute = () => `/addSuperhero`;
 const generateEditSuperheroApiRoute = (id) => `/addSuperhero/${id}`;
 const generateDeleteSuperheroApiRoute = (id) => `/addSuperhero/${id}`
+const generateDeleteSuperpowerApiRoute = (id) => `/addSuperpower/${id}`
 const generateAddSuperpowerApiRoute = () => '/addSuperpower';
+const generateEditSuperpowerApiRoute = (id) => `/addSuperpower/${id}`;
 const generateGetAllSuperpowerApiRoute = () => `${BASE_SERVER_V1_API}/comicon/getsuperpowers`;
 const generateGetAllSuperheroApiRoute = () => `${BASE_SERVER_V1_API}/comicon`
 export {
@@ -20,5 +22,7 @@ export {
     generateGetAllSuperpowerApiRoute,
     generateGetAllSuperheroApiRoute,
     generateEditSuperheroApiRoute,
-    generateDeleteSuperheroApiRoute
+    generateDeleteSuperheroApiRoute,
+    generateDeleteSuperpowerApiRoute,
+    generateEditSuperpowerApiRoute
 }
