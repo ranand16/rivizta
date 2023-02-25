@@ -11,6 +11,7 @@ import SuperpowerFormComponent from '../SuperpowerFormComponent/FormComponent';
 import GenericModal from '../Modals/GenericModal';
 import { ModalMode, Superhero, Superpower } from '../../config/Interfaces';
 import { get } from 'lodash';
+import { createApiCall } from '../../src/utility/functions';
 interface IProps { superheroData?: Superhero | null, superpowerOptions: Array<Superpower>, mode: ModalMode, editId: number }
 
 function FormComponent({ superheroData, superpowerOptions: sp = [], mode = "ADD", editId }: IProps) {
@@ -32,7 +33,7 @@ function FormComponent({ superheroData, superpowerOptions: sp = [], mode = "ADD"
     setSuperpowerOptions(sp);
   }, [sp, setSuperpowerOptions]);
 
-  const handleSubmit = (values: FormikValues) => {
+  const handleSubmit = async (values: FormikValues) => {
     setSubmit(true);
     setError(null);
     setSuccess(null);
@@ -46,20 +47,21 @@ function FormComponent({ superheroData, superpowerOptions: sp = [], mode = "ADD"
       superpowers: values.superpowers.toString()
     }
     if(editId && mode == "EDIT") data["id"] = editId;
-    axios({
-      method: mode == "ADD"? 'post': "PUT",
-      baseURL: `${BASE_SERVER_V1_API}/comicon`,
-      url: mode == "ADD"? generateAddSuperheroApiRoute() : generateEditSuperheroApiRoute(editId),
-      data: data
-    }).then(response => {
-      console.log(response);
+    
+    try {
+      await createApiCall(mode == "ADD" ? 'post' : 'PUT', `${BASE_SERVER_V1_API}/comicon`, {
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Methods':'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+        'Access-Control-Allow-Headers':'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+      }, mode == "ADD"? generateAddSuperheroApiRoute() : generateEditSuperheroApiRoute(editId), data)
       setSuccess(SuperheroFormStrings.success);
-    })
-    .catch(error => {
-      setError(error.response?.data?.errorDetails?.ererrorMsg || "Something went wrong. Please try later.");
-    }).finally(()=>{
+    } catch(err: any) {
+      setError(err.response?.data?.errorDetails?.ererrorMsg || "Something went wrong. Please try later.");
+    } finally {
       setSubmit(false);
-    });
+    }
   }
 
   return (

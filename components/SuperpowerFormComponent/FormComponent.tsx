@@ -9,6 +9,7 @@ import { SuperpowerFormStrings } from './constants';
 import { Formik, FormikErrors, FormikValues } from 'formik';
 import { ModalMode, Superpower } from '../../config/Interfaces';
 import { get } from 'lodash';
+import { createApiCall } from '../../src/utility/functions';
 
 interface IProps { superpowerData?: Superpower | null, mode: ModalMode, editId?: number }
 
@@ -18,7 +19,7 @@ function SuperpowerFormComponent({ superpowerData, mode = "ADD", editId }: IProp
   const [error, setError] = useState<string|null>(null);
   const [success, setSuccess] = useState<string|null>(null);
 
-  const handleSubmit = (values: FormikValues) => {
+  const handleSubmit = async (values: FormikValues) => {
     setSubmit(true);
     setError(null);
     setSuccess(null);
@@ -26,19 +27,33 @@ function SuperpowerFormComponent({ superpowerData, mode = "ADD", editId }: IProp
       superpower: values.superpower
     };
     if(editId && mode == "EDIT") data["id"] = editId; 
-    axios({
-      method: mode == "ADD" ? 'post' : 'PUT',
-      baseURL: `${BASE_SERVER_V1_API}/comicon`,
-      url: mode == "ADD"? generateAddSuperpowerApiRoute() : generateEditSuperpowerApiRoute(editId),
-      data: data
-    }).then(response => {
+    try {
+      await createApiCall(mode == "ADD" ? 'post' : 'PUT', `${BASE_SERVER_V1_API}/comicon`, {
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Methods':'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+        'Access-Control-Allow-Headers':'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+      }, mode == "ADD"? generateAddSuperpowerApiRoute() : generateEditSuperpowerApiRoute(editId), data)
       setSuccess(SuperpowerFormStrings.success);
-    })
-    .catch(error => {
-      setError(error.response?.data?.errorDetails?.ererrorMsg || "Something went wrong. Please try later.");
-    }).finally(()=>{
+    } catch(err: any) {
+      setError(err.response?.data?.errorDetails?.ererrorMsg || "Something went wrong. Please try later.");
+    } finally {
       setSubmit(false);
-    });
+    }
+    // axios({
+    //   method: mode == "ADD" ? 'post' : 'PUT',
+    //   baseURL: `${BASE_SERVER_V1_API}/comicon`,
+    //   url: mode == "ADD"? generateAddSuperpowerApiRoute() : generateEditSuperpowerApiRoute(editId),
+    //   data: data
+    // }).then(response => {
+    //   setSuccess(SuperpowerFormStrings.success);
+    // })
+    // .catch(error => {
+    //   setError(error.response?.data?.errorDetails?.ererrorMsg || "Something went wrong. Please try later.");
+    // }).finally(()=>{
+    //   setSubmit(false);
+    // });
   }
 
   return (
