@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { generateDeleteSuperheroApiRoute, generateDeleteSuperpowerApiRoute, generateGetAllSuperpowerApiRoute } from '../config/ApiRoutes';
 import axios from 'axios';
 import { BASE_SERVER_V1_API } from '../config/Constants';
+import { createApiCall } from '../src/utility/functions';
 
 const Home: NextPage = ({superpowerData: spd}: any) => {
   const [modalShow, setModalShow] = useState<boolean>(false);
@@ -82,26 +83,19 @@ const Home: NextPage = ({superpowerData: spd}: any) => {
           showPrimaryBtn={true}
           onPrimaryButtonClick={async ()=>{
             setDeleteModalShow(false);
-            await axios({
-              method: "DELETE",
-              baseURL: `${BASE_SERVER_V1_API}/comicon`,
-              headers:{
+            try {
+              await createApiCall("DELETE", `${BASE_SERVER_V1_API}/comicon`,{
                 'Access-Control-Allow-Credentials': 'true',
                 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Methods':'GET,OPTIONS,PATCH,DELETE,POST,PUT',
                 'Access-Control-Allow-Headers':'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-              },
-              url:  generateDeleteSuperpowerApiRoute(get(singleSuperPowerModalMode,"id",-1)),
-              data: {}
-            }).then(response => {
-              console.log(response);
-            })
-            .catch(error => {
-              console.log(error);
-            }).finally(()=>{
-
-            });
+              }, generateDeleteSuperpowerApiRoute(get(singleSuperPowerModalMode,"id",-1))).then((response)=>{
+                console.log(response);
+              })
+            } catch(err) {
+              console.log(err);
+            }
             const resp = await axios.get(generateGetAllSuperpowerApiRoute(), {});
             setSuperpowerData(get(resp, "data.data", []));
           }}
