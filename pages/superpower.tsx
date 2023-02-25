@@ -131,6 +131,7 @@ export default Home;
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   console.info(`superpower.tsx -- ${req.headers['user-agent']}  -- ${new Date()}`);
   const superpowerRoute = generateGetAllSuperpowerApiRoute();
+  console.log("This is the route :: ", superpowerRoute);
   try {
       const resp = await axios.get(superpowerRoute, {});
       console.log(resp.data.data);
