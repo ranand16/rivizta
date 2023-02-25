@@ -137,8 +137,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   res.setHeader("Access-Control-Allow-Methods","GET,OPTIONS,PATCH,DELETE,POST,PUT");
   res.setHeader("Access-Control-Allow-Headers","X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version");
   try {
-      axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
-      const resp = await axios.get(superpowerRoute, {});
+      // axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
+      const resp = await axios.get(superpowerRoute, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        }
+      });
       console.log(resp.data.data);
       return { props: { error: null, superpowerData: get(resp, "data.data", [])}  };
   } catch (err) {
