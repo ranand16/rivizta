@@ -37,23 +37,11 @@ function SuperpowerFormComponent({ superpowerData, mode = "ADD", editId }: IProp
       }, mode == "ADD"? generateAddSuperpowerApiRoute() : generateEditSuperpowerApiRoute(editId), data)
       setSuccess(SuperpowerFormStrings.success);
     } catch(err: any) {
+      console.log(err)
       setError(err.response?.data?.errorDetails?.ererrorMsg || "Something went wrong. Please try later.");
     } finally {
       setSubmit(false);
     }
-    // axios({
-    //   method: mode == "ADD" ? 'post' : 'PUT',
-    //   baseURL: `${BASE_SERVER_V1_API}/comicon`,
-    //   url: mode == "ADD"? generateAddSuperpowerApiRoute() : generateEditSuperpowerApiRoute(editId),
-    //   data: data
-    // }).then(response => {
-    //   setSuccess(SuperpowerFormStrings.success);
-    // })
-    // .catch(error => {
-    //   setError(error.response?.data?.errorDetails?.ererrorMsg || "Something went wrong. Please try later.");
-    // }).finally(()=>{
-    //   setSubmit(false);
-    // });
   }
 
   return (
